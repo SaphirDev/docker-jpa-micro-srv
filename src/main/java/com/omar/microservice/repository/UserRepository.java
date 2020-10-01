@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
@@ -28,6 +29,17 @@ public class UserRepository {
 		return entityManager.createQuery("select u from User u", User.class).getResultList();
 	}
 
+	public User findById(long id) {
+		return entityManager.find(User.class, id);
+	}
+
+	public User findByUsername(String username) {
+		TypedQuery<User> query = entityManager.createQuery("select u from User u where u.username=?1", User.class);
+		query.setParameter(1, username);
+		return query.getResultList().get(0);
+
+	}
+
 	public User add(User user) {
 		entityManager.persist(user);
 		return user;
@@ -35,10 +47,6 @@ public class UserRepository {
 
 	public User update(User user) {
 		return entityManager.merge(user);
-	}
-
-	public User findById(long id) {
-		return entityManager.find(User.class, id);
 	}
 
 	public void deleteById(long id) {
