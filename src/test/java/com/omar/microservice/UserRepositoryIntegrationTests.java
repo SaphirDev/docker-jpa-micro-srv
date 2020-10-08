@@ -17,7 +17,6 @@ import com.omar.microservice.repository.UserRepository;
 
 @SpringBootTest
 @AutoConfigureTestEntityManager
-
 class UserRepositoryIntegrationTests {
 
 	@Autowired

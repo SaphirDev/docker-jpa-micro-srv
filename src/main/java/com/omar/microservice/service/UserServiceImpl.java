@@ -18,7 +18,7 @@ import com.omar.microservice.repository.UserRepository;
  *
  */
 @Service
-public class UserServiceImp implements UserService {
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserRepository reporitory;

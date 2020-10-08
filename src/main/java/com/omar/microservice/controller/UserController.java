@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.omar.microservice.dto.UserDTO;
-import com.omar.microservice.dto.UserDTOMapper;
-import com.omar.microservice.entity.User;
-import com.omar.microservice.repository.UserRepository;
+import com.omar.microservice.service.UserService;
 
 /**
  * @author Omar
@@ -27,25 +25,24 @@ import com.omar.microservice.repository.UserRepository;
 public class UserController {
 
 	@Autowired
-	UserRepository repository;
+	UserService userService;
 
 	// This method get all users from db
 	@GetMapping(value = "/getAll", headers = "Accept=application/json")
 	public List<UserDTO> getAllUsers() {
-		return UserDTOMapper.INSTANCE.toUserDTOs(repository.findAll());
+		return userService.getAllUsers();
 	}
 
 	// Add user
 	@PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
 	public UserDTO addUser(@RequestBody UserDTO userDTO) {
-		User user = repository.add(UserDTOMapper.INSTANCE.toUser(userDTO));
-		return UserDTOMapper.INSTANCE.toUserDTO(user);
+		return userService.addUser(userDTO);
 	}
 
 	// Delete user
-	@GetMapping(value = "/delete", headers = "Accept=application/json")
-	public void deleteUser(@RequestParam("id") long id) {
-		repository.deleteById(id);
+	@GetMapping(value = "/delete", produces = "application/json")
+	public String deleteUser(@RequestParam("id") long id) {
+		return userService.deleteUser(id) ? "success" : "User not found!";
 	}
 
 }
